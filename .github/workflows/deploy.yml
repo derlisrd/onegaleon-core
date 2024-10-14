@@ -26,3 +26,5 @@ jobs:
           cd /home/sites/saeta.app/one-galeon-core
           git pull origin main
           php artisan migrate
+          php artisan route:cache
+          php artisan storage:link
