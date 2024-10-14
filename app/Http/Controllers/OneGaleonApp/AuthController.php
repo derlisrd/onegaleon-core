@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\OneGaleonApp;
 
 use App\Http\Controllers\BaseController;
-use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
