@@ -8,4 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class Movimiento extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'icon',
+        'user_id',
+        'descripcion',
+        'valor',
+        'category_id'
+    ];
 }
