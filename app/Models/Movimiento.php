@@ -16,7 +16,8 @@ class Movimiento extends Model
         'user_id',
         'descripcion',
         'valor',
-        'category_id'
+        'category_id',
+        'tipo'
     ];
     public function getCreatedAtAttribute($date){
         return Carbon::parse($date)
