@@ -17,7 +17,8 @@ return new class extends Migration
             $table->bigInteger('category_id')->unsigned()->nullable();
             $table->text('descripcion');
             $table->float('valor');
-            $table->enum('tipo',[0,1])->default(0)->comment('1 ingr 0 egr');
+            //$table->enum('tipo',[0,1])->default(0)->comment('1 ingr 0 egr');
+            $table->boolean('tipo')->default(0)->comment('1 ingr 0 egr');
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('category_id')->references('id')->on('categories');
             $table->timestamps();
