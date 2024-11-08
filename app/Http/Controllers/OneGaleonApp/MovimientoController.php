@@ -73,7 +73,7 @@ class MovimientoController extends Controller
         ]);
 
         return response()->json([
-            'succces'=>true,
+            'success'=>true,
             'message'=>'created',
             'results'=>$movimiento
         ],201);
