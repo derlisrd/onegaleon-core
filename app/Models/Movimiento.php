@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Model;
 class Movimiento extends Model
 {
     use HasFactory;
+    protected $table = 'movimientos';
+    protected $dateFormat = 'Y-m-d H:i:s';
     protected $fillable = [
         'icon',
         'user_id',
@@ -16,7 +18,9 @@ class Movimiento extends Model
         'valor',
         'category_id'
     ];
-    public function getFormattedCreatedAtAttribute(){
-        return Carbon::parse($this->created_at)->format('Y-m-d H:i');
+    public function getCreatedAtAttribute($date){
+        return Carbon::parse($date)
+        ->timezone('America/Asuncion')
+        ->format('Y-m-d H:i:s');
     }
 }
