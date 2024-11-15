@@ -25,12 +25,14 @@ class AuthController extends BaseController
             $credentials = $req->only('email', 'password');
             $token = JWTAuth::attempt($credentials);
             if ($token) {
+                $user = User::where('email',$req->email)->first();
                 $refreshToken = JWTAuth::claims(['is_refresh' => true])->attempt($credentials);
                 return $this->sendResponse([
                     'tokenRaw' => $token,
                     'token' => 'Bearer ' . $token,
                     'refreshTokenRaw' => $refreshToken,
                     'refreshToken' => 'Bearer ' . $refreshToken,
+                    'name' =>$user->name
                 ], 'Ingresado');
             }
             return response()->json([
