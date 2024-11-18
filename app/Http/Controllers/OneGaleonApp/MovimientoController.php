@@ -13,23 +13,37 @@ class MovimientoController extends Controller
 
 
 
-    public function index(Request $req){
+    public function index(Request $req)
+    {
         $inicioMes = $req->input('desde') ?? Carbon::now()->startOfMonth()->format('Y-m-d H:i:s');
-        $finMes = $req->input('hasta') ?? Carbon::now()->endOfDay()->format('Y-m-d');
+        $finMes = $req->input('hasta') ?? Carbon::now()->endOfDay()->format('Y-m-d H:i:s');
         $user = $req->user();
 
-        $results = Movimiento::where('user_id',$user->id)->whereBetween('created_at',[$inicioMes,$finMes]);
-        $ingresos = $results->where('tipo',1)->sum('valor');
-        $egresos = $results->where('tipo',0)->sum('valor');
+        // Obtener ingresos y egresos en una sola consulta
+        $totales = Movimiento::selectRaw('tipo, SUM(valor) as total')
+                    ->where('user_id', $user->id)
+                    ->whereBetween('created_at', [$inicioMes, $finMes])
+                    ->groupBy('tipo')
+                    ->pluck('total', 'tipo');
+
+        $ingresos = $totales[1] ?? 0;
+        $egresos = $totales[0] ?? 0;
+
+        // Obtener movimientos
+        $movimientos = Movimiento::where('user_id', $user->id)
+                        ->whereBetween('created_at', [$inicioMes, $finMes])
+                        ->get();
+
         return response()->json([
-            'success'=>true,
-            'results'=>[
-                'movimientos'=>$results->get(),
-                'ingresos' =>$ingresos,
-                'egresos' =>$egresos
-            ]
+            'success' => true,
+            'results' => [
+                'movimientos' => $movimientos,
+                'ingresos'    => $ingresos,
+                'egresos'     => $egresos,
+            ],
         ]);
     }
+
 
 
 
