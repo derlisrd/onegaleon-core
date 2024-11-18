@@ -4,6 +4,7 @@ namespace App\Http\Controllers\OneGaleonApp;
 
 use App\Http\Controllers\Controller;
 use App\Models\Movimiento;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -13,14 +14,20 @@ class MovimientoController extends Controller
 
 
     public function index(Request $req){
-
+        $inicioMes = $req->input('desde') ?? Carbon::now()->startOfMonth()->format('Y-m-d H:i:s');
+        $finMes = $req->input('hasta') ?? Carbon::now()->endOfDay()->format('Y-m-d');
         $user = $req->user();
 
-        $results = Movimiento::where('user_id',$user->id)->get();
-
+        $results = Movimiento::where('user_id',$user->id)->whereBetween('created_at',[$inicioMes,$finMes]);
+        $ingresos = $results->where('tipo',1)->sum('valor');
+        $egresos = $results->where('tipo',0)->sum('valor');
         return response()->json([
             'success'=>true,
-            'results'=>$results
+            'results'=>[
+                'movimientos'=>$results->get(),
+                'ingresos' =>$ingresos,
+                'egresos' =>$egresos
+            ]
         ]);
     }
 
