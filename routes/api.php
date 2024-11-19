@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::prefix('/auth')->group(function(){
+    Route::post('/check',[AuthController::class,'refreshToken'])->name('api_check');
     Route::post('/login',[AuthController::class,'login'])->name('api_login');
     Route::post('/register',[AuthController::class,'register'])->name('api_register');
 });
