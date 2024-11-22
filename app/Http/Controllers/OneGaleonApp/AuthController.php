@@ -32,7 +32,8 @@ class AuthController extends BaseController
                     'token' => 'Bearer ' . $token,
                     'refreshTokenRaw' => $refreshToken,
                     'refreshToken' => 'Bearer ' . $refreshToken,
-                    'name' =>$user->name
+                    'name' =>$user->name,
+                    'email' => $user->email
                 ], 'Ingresado');
             }
             return response()->json([
@@ -75,6 +76,8 @@ class AuthController extends BaseController
                     'token' => 'Bearer ' . $token,
                     'refreshTokenRaw' => $refreshToken,
                     'refreshToken' => 'Bearer ' . $refreshToken,
+                    'name' =>$user->name,
+                    'email' => $user->email
                 ]
             ], 201);
         } catch (\Throwable $th) {
